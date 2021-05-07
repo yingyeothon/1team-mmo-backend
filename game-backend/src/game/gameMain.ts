@@ -1,8 +1,11 @@
-import BaseGameRequest from "../gamebase/requests/BaseGameRequest";
+import {
+  BaseGameRequest,
+  GameMainArguments,
+} from "@yingyeothon/lambda-gamebase";
+
 import { ConsoleLogger } from "@yingyeothon/logger";
-import GameMainArguments from "../gamebase/models/GameMainArguments";
 import gameConstants from "./config/gameConstants";
-import runGameAllTogether from "../doGameAllTogether/runGameAllTogether";
+import { runGameAllTogether } from "@yingyeothon/do-game-all-together";
 
 const logger = new ConsoleLogger(
   process.env.STAGE === "production" ? "info" : "debug"

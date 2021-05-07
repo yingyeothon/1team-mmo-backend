@@ -1,0 +1,11 @@
+{
+  "name": "1team-mmo-backend",
+  "private": "true",
+  "version": "1.0.0",
+  "repository": "https://github.com/yingyeothon/1team-mmo-backend",
+  "license": "MIT",
+  "workspaces": [
+    "libs/*",
+    "game-backend"
+  ]
+}

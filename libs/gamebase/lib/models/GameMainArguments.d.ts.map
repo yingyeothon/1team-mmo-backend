@@ -1,0 +1,1 @@
+{"version":3,"file":"GameMainArguments.d.ts","sourceRoot":"","sources":["../../src/models/GameMainArguments.ts"],"names":[],"mappings":"AAAA,OAAO,eAAe,MAAM,mBAAmB,CAAC;AAEhD,MAAM,CAAC,OAAO,WAAW,iBAAiB,CAAC,CAAC;IAC1C,MAAM,EAAE,MAAM,CAAC;IACf,OAAO,EAAE,eAAe,EAAE,CAAC;IAC3B,YAAY,EAAE,MAAM,OAAO,CAAC,CAAC,EAAE,CAAC,CAAC;CAClC"}

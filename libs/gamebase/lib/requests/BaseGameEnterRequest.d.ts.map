@@ -1,0 +1,1 @@
+{"version":3,"file":"BaseGameEnterRequest.d.ts","sourceRoot":"","sources":["../../src/requests/BaseGameEnterRequest.ts"],"names":[],"mappings":"AAAA,OAAO,2BAA2B,MAAM,+BAA+B,CAAC;AAExE,MAAM,CAAC,OAAO,WAAW,oBACvB,SAAQ,2BAA2B;IACnC,IAAI,EAAE,OAAO,CAAC;IACd,QAAQ,EAAE,MAAM,CAAC;CAClB"}

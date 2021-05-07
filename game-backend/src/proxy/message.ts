@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
-import handleMessages from "../gamebase/handlers/handleMessages";
+import { handleMessages } from "@yingyeothon/lambda-gamebase";
 import redisKeyPrefix from "../config/redisKeyPrefix";
 
 export const handle: APIGatewayProxyHandler = async (event) =>

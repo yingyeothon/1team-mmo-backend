@@ -1,0 +1,1 @@
+{"version":3,"file":"clearActorStartEvent.d.ts","sourceRoot":"","sources":["../../src/actor/clearActorStartEvent.ts"],"names":[],"mappings":"AAAA,wBAAsB,oBAAoB,CAAC,EACzC,MAAM,EACN,GAAG,EACH,cAAc,GACf,EAAE;IACD,MAAM,EAAE,MAAM,CAAC;IACf,GAAG,EAAE,CAAC,GAAG,EAAE,MAAM,KAAK,OAAO,CAAC,GAAG,CAAC,CAAC;IACnC,cAAc,EAAE,MAAM,CAAC;CACxB,gBAEA"}

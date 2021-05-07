@@ -4,14 +4,16 @@
   "description": "Serverless Game backend",
   "main": "handler.ts",
   "scripts": {
-    "build": "node --max-old-space-size=4096 node_modules/serverless/bin/serverless package",
-    "deploy": "node --max-old-space-size=4096 node_modules/serverless/bin/serverless deploy",
+    "build": "node --max-old-space-size=4096 ../node_modules/serverless/bin/serverless package",
+    "deploy": "node --max-old-space-size=4096 ../node_modules/serverless/bin/serverless deploy",
     "start": "cross-env STAGE=\"local\" REDIS_HOST=\"localhost\" REDIS_PASSWORD=\"\" sls offline",
     "start:docker": "cross-env STAGE=\"local\" REDIS_HOST=\"redis\" REDIS_PASSWORD=\"\" sls offline --host 0.0.0.0"
   },
   "dependencies": {
     "@yingyeothon/actor-system": "^0.3.1",
     "@yingyeothon/actor-system-redis-support": "^0.3.0",
+    "@yingyeothon/do-game-all-together": "1.0.0",
+    "@yingyeothon/lambda-gamebase": "1.0.0",
     "@yingyeothon/logger": "^0.3.1",
     "@yingyeothon/naive-redis": "^0.3.2",
     "mem": "^8.1.1",

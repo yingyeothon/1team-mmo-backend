@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
     "target": "ES2019",
     "outDir": "lib",
     "lib": ["ESNext"],
@@ -16,11 +16,5 @@
     "noUnusedParameters": true,
     "skipLibCheck": true
   },
-  "include": ["./**/*.ts"],
-  "exclude": [
-    "node_modules/**/*",
-    ".serverless/**/*",
-    ".webpack/**/*",
-    ".vscode/**/*"
-  ]
+  "exclude": ["node_modules", ".serverless", ".webpack"]
 }

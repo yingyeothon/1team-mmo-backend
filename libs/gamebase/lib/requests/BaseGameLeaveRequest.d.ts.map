@@ -1,0 +1,1 @@
+{"version":3,"file":"BaseGameLeaveRequest.d.ts","sourceRoot":"","sources":["../../src/requests/BaseGameLeaveRequest.ts"],"names":[],"mappings":"AAAA,OAAO,2BAA2B,MAAM,+BAA+B,CAAC;AAExE,MAAM,CAAC,OAAO,WAAW,oBACvB,SAAQ,2BAA2B;IACnC,IAAI,EAAE,OAAO,CAAC;CACf"}
