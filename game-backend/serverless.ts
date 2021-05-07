@@ -17,6 +17,7 @@ const serverlessConfiguration: Serverless = {
     runtime: "nodejs12.x",
     region: "ap-northeast-2",
     stage,
+    lambdaHashingVersion: 20201221,
     tracing: {
       apiGateway: true,
       lambda: true,
@@ -33,30 +34,34 @@ const serverlessConfiguration: Serverless = {
       GAME_ACTOR_LAMBDA_NAME: gameActorLambdaName,
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1,
     },
-    iamRoleStatements: [
-      {
-        Effect: "Allow",
-        Action: ["lambda:InvokeFunction"],
-        Resource: [
+    iam: {
+      role: {
+        statements: [
           {
-            "Fn::Join": [
-              ":",
-              [
-                "arn:aws:lambda",
-                {
-                  Ref: "AWS::Region",
-                },
-                {
-                  Ref: "AWS::AccountId",
-                },
-                "function",
-                gameActorLambdaName,
-              ],
+            Effect: "Allow",
+            Action: ["lambda:InvokeFunction"],
+            Resource: [
+              {
+                "Fn::Join": [
+                  ":",
+                  [
+                    "arn:aws:lambda",
+                    {
+                      Ref: "AWS::Region",
+                    },
+                    {
+                      Ref: "AWS::AccountId",
+                    },
+                    "function",
+                    gameActorLambdaName,
+                  ],
+                ],
+              },
             ],
           },
         ],
       },
-    ],
+    },
   },
   custom: {
     prune: {

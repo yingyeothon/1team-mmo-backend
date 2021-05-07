@@ -7,10 +7,10 @@ module.exports = {
   entry: slsw.lib.entries,
   // devtool: "no-source-map",
   resolve: {
-    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]
+    extensions: [".mjs", ".js", ".json", ".ts"]
   },
   output: {
-    libraryTarget: "commonjs",
+    libraryTarget: "commonjs2",
     path: path.join(__dirname, ".webpack"),
     filename: "[name].js"
   },
