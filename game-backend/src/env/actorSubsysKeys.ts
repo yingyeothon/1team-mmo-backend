@@ -1,5 +1,7 @@
+import gameName from "./gameName";
+
 export default {
-  awaiterKeyPrefix: ":click-and-more:awaiter/",
-  lockKeyPrefix: ":click-and-more:lock/",
-  queueKeyPrefix: ":click-and-more:queue/",
+  awaiterKeyPrefix: `${gameName}/awaiter/`,
+  lockKeyPrefix: `${gameName}/lock/`,
+  queueKeyPrefix: `${gameName}/queue/`,
 };

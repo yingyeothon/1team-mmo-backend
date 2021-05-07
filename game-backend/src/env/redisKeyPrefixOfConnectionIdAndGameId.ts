@@ -1,3 +1,5 @@
-const redisKeyPrefixOfConnectionIdAndGameId = "click-and-more/gameId/";
+import gameName from "./gameName";
+
+const redisKeyPrefixOfConnectionIdAndGameId = `${gameName}/gameId/`;
 
 export default redisKeyPrefixOfConnectionIdAndGameId;

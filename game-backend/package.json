@@ -1,7 +1,7 @@
 {
-  "name": "click-and-more-api",
+  "name": "game-backend",
   "version": "1.0.0",
-  "description": "Serverless backend for Click-and-more",
+  "description": "Serverless Game backend",
   "main": "handler.ts",
   "scripts": {
     "build": "node --max-old-space-size=4096 node_modules/serverless/bin/serverless package",
