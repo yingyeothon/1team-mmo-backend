@@ -1,6 +1,7 @@
 import {
   BaseGameRequest,
   GameMainArguments,
+  broadcast,
 } from "@yingyeothon/lambda-gamebase";
 
 import { ConsoleLogger } from "@yingyeothon/logger";
@@ -29,8 +30,17 @@ export default async function gameMain({
     gameWaitingSeconds: gameConstants.gameWaitingSeconds,
     gameRunningSeconds: gameConstants.gameRunningSeconds,
 
-    isGameOver: () => false,
-    processMessage: async () => {},
+    isGameOver: ({ context }) =>
+      Object.keys(context.connectedUsers).length === 0,
+    processMessage: async ({ context, message }) => {
+      await broadcast(
+        [
+          ...Object.keys(context.connectedUsers),
+          ...context.observers.map((ob) => ob.connectionId).filter(Boolean),
+        ],
+        message
+      );
+    },
     updateTimeDelta: async () => {},
   });
 }
