@@ -1,6 +1,10 @@
+import { ApiGatewayManagementApi } from "aws-sdk";
 import env from "../env/env";
 import fakeConnectionId from "../env/fakeConnectionId";
-import { newApiGatewayManagementApi } from "@yingyeothon/aws-apigateway-management-api";
+
+const apimgmt = new ApiGatewayManagementApi({
+  endpoint: env.isOffline ? `http://localhost:3001` : env.webSocketEndpoint,
+});
 
 export default async function dropConnection(
   connectionId: string
@@ -9,9 +13,7 @@ export default async function dropConnection(
     return true;
   }
   try {
-    await newApiGatewayManagementApi({
-      endpoint: env.isOffline ? `http://localhost:3001` : env.webSocketEndpoint,
-    })
+    apimgmt
       .deleteConnection({
         ConnectionId: connectionId,
       })
