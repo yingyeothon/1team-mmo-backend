@@ -1,10 +1,11 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
-import handleDisconnect from "@yingyeothon/lambda-gamebase/lib/handlers/handleDisconnect";
-import redisKeyPrefix from "../config/redisKeyPrefix";
+import handleMessages from "@yingyeothon/lambda-gamebase/lib/handlers/handleMessages";
+import redisKeyPrefix from "../lambda/config/redisKeyPrefix";
 
 export const handle: APIGatewayProxyHandler = async (event) =>
-  handleDisconnect({
+  handleMessages({
     event,
     connectionIdAndGameIdKeyPrefix: redisKeyPrefix.connectionIdAndGameId,
     actorQueueKeyPrefix: redisKeyPrefix.actor.queue,
+    validateMessage: (maybe) => typeof maybe === "object",
   });

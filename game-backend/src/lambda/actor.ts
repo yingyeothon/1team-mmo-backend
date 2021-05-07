@@ -2,9 +2,9 @@ import { GameActorStartEvent, handleActor } from "@yingyeothon/lambda-gamebase";
 
 import { ConsoleLogger } from "@yingyeothon/logger";
 import { Handler } from "aws-lambda";
-import gameConstants from "./config/gameConstants";
-import gameMain from "./gameMain";
-import redisKeyPrefix from "../config/redisKeyPrefix";
+import gameConstants from "../game/config/gameConstants";
+import gameMain from "../game/gameMain";
+import redisKeyPrefix from "./config/redisKeyPrefix";
 
 const logger = new ConsoleLogger("debug");
 

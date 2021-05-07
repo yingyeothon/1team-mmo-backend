@@ -1,4 +1,5 @@
 import type { Serverless } from "serverless/aws";
+import functions from "./src/lambda/functions";
 
 const serviceName = `mmo-backend${process.env.RELEASE_POSTFIX ?? ""}`;
 const stage = process.env.STAGE ?? "dev";
@@ -18,6 +19,8 @@ const serverlessConfiguration: Serverless = {
     region: "ap-northeast-2",
     stage,
     lambdaHashingVersion: 20201221,
+    timeout: 3,
+    memorySize: 256,
     tracing: {
       apiGateway: true,
       lambda: true,
@@ -72,62 +75,7 @@ const serverlessConfiguration: Serverless = {
   package: {
     individually: true,
   },
-  functions: {
-    connect: {
-      handler: "src/proxy/connect.handle",
-      timeout: 3,
-      memorySize: 256,
-      events: [
-        {
-          websocket: {
-            route: "$connect",
-          },
-        },
-      ],
-    },
-    disconnect: {
-      handler: "src/proxy/disconnect.handle",
-      timeout: 3,
-      memorySize: 256,
-      events: [
-        {
-          websocket: {
-            route: "$disconnect",
-          },
-        },
-      ],
-    },
-    message: {
-      handler: "src/proxy/message.handle",
-      timeout: 3,
-      memorySize: 256,
-      events: [
-        {
-          websocket: {
-            route: "$default",
-          },
-        },
-      ],
-    },
-    game: {
-      handler: "src/game/actor.handle",
-      timeout: 900,
-      memorySize: 1024,
-    },
-    debugStart: {
-      handler: "src/proxy/debugStart.handle",
-      timeout: 6,
-      memorySize: 256,
-      events: [
-        {
-          httpApi: {
-            method: "POST",
-            path: "/debug",
-          },
-        },
-      ],
-    },
-  },
+  functions,
 };
 
 module.exports = serverlessConfiguration;
