@@ -1,14 +1,15 @@
 import redisConnect, {
-  IRedisConnection
+  RedisConnection,
 } from "@yingyeothon/naive-redis/lib/connection";
+
 import env from "./env";
 
 export default async function useRedis<R>(
-  work: (connection: IRedisConnection) => Promise<R>
+  work: (connection: RedisConnection) => Promise<R>
 ): Promise<R> {
   const redisConnection = redisConnect({
     host: env.redisHost,
-    password: env.redisPassword
+    password: env.redisPassword,
   });
   try {
     const result = await work(redisConnection);

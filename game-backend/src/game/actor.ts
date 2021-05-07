@@ -1,23 +1,24 @@
-import actorEventLoop from "@yingyeothon/actor-system/lib/actor/eventLoop";
+import {
+  GameActorStartEvent,
+  clearActorStartEvent,
+  saveActorStartEvent,
+} from "../shared/actorRequest";
+
 import { ConsoleLogger } from "@yingyeothon/logger";
+import Game from "./game";
+import { GameRequest } from "../shared/gameRequest";
+import { Handler } from "aws-lambda";
+import actorEventLoop from "@yingyeothon/actor-system/lib/actor/eventLoop";
+import actorSubsys from "./actorSubsys";
+import gameAliveSeconds from "./env/gameAliveSeconds";
+import readyCall from "../lobby/readyCall";
+import redisConnection from "./redisConnection";
 import redisDel from "@yingyeothon/naive-redis/lib/del";
 import redisSet from "@yingyeothon/naive-redis/lib/set";
-import { Handler } from "aws-lambda";
-import readyCall from "../lobby/readyCall";
-import {
-  clearActorStartEvent,
-  IGameActorStartEvent,
-  saveActorStartEvent
-} from "../shared/actorRequest";
-import { GameRequest } from "../shared/gameRequest";
-import actorSubsys from "./actorSubsys";
-import Game from "./game";
-import { gameAliveSeconds } from "./model/constraints";
-import redisConnection from "./redisConnection";
 
 const logger = new ConsoleLogger(`debug`);
 
-export const handle: Handler<IGameActorStartEvent, void> = async event => {
+export const handle: Handler<GameActorStartEvent, void> = async (event) => {
   logger.debug(`Start a new game lambda`, event);
 
   const { gameId, members } = event;
@@ -31,8 +32,8 @@ export const handle: Handler<IGameActorStartEvent, void> = async event => {
     event,
     set: (key, value) =>
       redisSet(redisConnection, key, value, {
-        expirationMillis: gameAliveSeconds * 1000
-      })
+        expirationMillis: gameAliveSeconds * 1000,
+      }),
   });
 
   // Send the ready signal to the Lobby.
@@ -45,7 +46,7 @@ export const handle: Handler<IGameActorStartEvent, void> = async event => {
   await actorEventLoop<GameRequest>({
     ...actorSubsys,
     id: gameId,
-    loop: async poll => {
+    loop: async (poll) => {
       logger.info(`Start a game with id`, gameId, members);
       const game = new Game(gameId, members, async () => {
         const messages = await poll();
@@ -62,8 +63,8 @@ export const handle: Handler<IGameActorStartEvent, void> = async event => {
       logger.info(`End of the game`, gameId, members);
       await clearActorStartEvent({
         gameId,
-        del: key => redisDel(redisConnection, key)
+        del: (key) => redisDel(redisConnection, key),
       });
-    }
+    },
   });
 };

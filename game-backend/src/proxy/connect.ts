@@ -1,23 +1,23 @@
-import actorRedisPush from "@yingyeothon/actor-system-redis-support/lib/queue/push";
-import actorEnqueue from "@yingyeothon/actor-system/lib/actor/enqueue";
-import { ConsoleLogger } from "@yingyeothon/logger";
-import redisGet from "@yingyeothon/naive-redis/lib/get";
-import redisSet from "@yingyeothon/naive-redis/lib/set";
 import { APIGatewayProxyHandler } from "aws-lambda";
+import { ConsoleLogger } from "@yingyeothon/logger";
+import actorEnqueue from "@yingyeothon/actor-system/lib/actor/enqueue";
+import actorRedisPush from "@yingyeothon/actor-system-redis-support/lib/queue/push";
+import actorSubsysKeys from "../env/actorSubsysKeys";
 import { loadActorStartEvent } from "../shared/actorRequest";
-import actorSubsysKeys from "../shared/actorSubsysKeys";
-import env from "./support/env";
+import redisGet from "@yingyeothon/naive-redis/lib/get";
+import redisKeyPrefixOfConnectionIdAndGameId from "../env/redisKeyPrefixOfConnectionIdAndGameId";
+import redisSet from "@yingyeothon/naive-redis/lib/set";
 import responses from "./support/responses";
 import useRedis from "./support/useRedis";
 
 const expirationMillis = 900 * 1000;
 const logger = new ConsoleLogger(`debug`);
 
-export const handle: APIGatewayProxyHandler = async event => {
+export const handle: APIGatewayProxyHandler = async (event) => {
   const { connectionId } = event.requestContext;
   const getParameter = (key: string) =>
     event.headers[key] ?? (event.queryStringParameters ?? {})[key];
-  const response = await useRedis(async redisConnection => {
+  const response = await useRedis(async (redisConnection) => {
     // A client should send a "X-GAME-ID" via HTTP Header.
     const gameId = getParameter("x-game-id");
     const memberId = getParameter("x-member-id");
@@ -29,13 +29,13 @@ export const handle: APIGatewayProxyHandler = async event => {
     }
     const startEvent = await loadActorStartEvent({
       gameId,
-      get: key => redisGet(redisConnection, key)
+      get: (key) => redisGet(redisConnection, key),
     });
     if (startEvent === null) {
       logger.error(`Invalid game context from gameId`, gameId);
       return responses.NotFound;
     }
-    if (startEvent.members.every(m => m.memberId !== memberId)) {
+    if (startEvent.members.every((m) => m.memberId !== memberId)) {
       logger.error(`Not registered member`, startEvent, memberId);
       return responses.NotFound;
     }
@@ -43,7 +43,7 @@ export const handle: APIGatewayProxyHandler = async event => {
     // Register connection and start a game.
     await redisSet(
       redisConnection,
-      env.redisKeyPrefixOfConnectionIdAndGameId + connectionId,
+      redisKeyPrefixOfConnectionIdAndGameId + connectionId,
       gameId,
       { expirationMillis }
     );
@@ -53,16 +53,16 @@ export const handle: APIGatewayProxyHandler = async event => {
         queue: actorRedisPush({
           connection: redisConnection,
           keyPrefix: actorSubsysKeys.queueKeyPrefix,
-          logger
+          logger,
         }),
-        logger
+        logger,
       },
       {
         item: {
           type: "enter",
           connectionId,
-          memberId
-        }
+          memberId,
+        },
       }
     );
     logger.info(`Game logged`, gameId, connectionId);

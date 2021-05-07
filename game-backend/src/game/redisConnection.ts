@@ -1,9 +1,9 @@
+import env from "./env/env";
 import redisConnect from "@yingyeothon/naive-redis/lib/connection";
-import env from "./support/env";
 
 const redisConnection = redisConnect({
   host: env.redisHost,
-  password: env.redisPassword
+  password: env.redisPassword,
 });
 
 export default redisConnection;

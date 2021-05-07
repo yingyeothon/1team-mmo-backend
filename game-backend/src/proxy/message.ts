@@ -1,28 +1,29 @@
-import actorRedisPush from "@yingyeothon/actor-system-redis-support/lib/queue/push";
-import actorEnqueue from "@yingyeothon/actor-system/lib/actor/enqueue";
+import { APIGatewayProxyHandler } from "aws-lambda";
 import { ConsoleLogger } from "@yingyeothon/logger";
+import actorEnqueue from "@yingyeothon/actor-system/lib/actor/enqueue";
+import actorRedisPush from "@yingyeothon/actor-system-redis-support/lib/queue/push";
+import actorSubsysKeys from "../env/actorSubsysKeys";
+import env from "./support/env";
 import redisConnect from "@yingyeothon/naive-redis/lib/connection";
 import redisGet from "@yingyeothon/naive-redis/lib/get";
-import { APIGatewayProxyHandler } from "aws-lambda";
-import actorSubsysKeys from "../shared/actorSubsysKeys";
-import { ClientRequest, validateClientRequest } from "../shared/clientRequest";
-import env from "./support/env";
+import redisKeyPrefixOfConnectionIdAndGameId from "../env/redisKeyPrefixOfConnectionIdAndGameId";
 import responses from "./support/responses";
 
 const logger = new ConsoleLogger(`debug`);
 const redisConnection = redisConnect({
   host: env.redisHost,
-  password: env.redisPassword
+  password: env.redisPassword,
 });
 
-export const handle: APIGatewayProxyHandler = async event => {
+export const handle: APIGatewayProxyHandler = async (event) => {
   const connectionId = event.requestContext.connectionId;
 
   // Parse and validate a message from the client.
-  let request: ClientRequest | undefined;
+  let request: any;
   try {
-    request = JSON.parse(event.body) as ClientRequest;
-    if (!validateClientRequest(request)) {
+    // FIXME: Check if a request is valid.
+    request = JSON.parse(event.body);
+    if (typeof request !== "object") {
       throw new Error(`Invalid message: [${event.body}]`);
     }
   } catch (error) {
@@ -33,7 +34,7 @@ export const handle: APIGatewayProxyHandler = async event => {
   // Read gameId related this connectionId.
   const gameId: string | null = await redisGet(
     redisConnection,
-    env.redisKeyPrefixOfConnectionIdAndGameId + connectionId
+    redisKeyPrefixOfConnectionIdAndGameId + connectionId
   );
   logger.info(`Game id`, connectionId, gameId);
   if (!gameId) {
@@ -48,9 +49,9 @@ export const handle: APIGatewayProxyHandler = async event => {
       queue: actorRedisPush({
         connection: redisConnection,
         keyPrefix: actorSubsysKeys.queueKeyPrefix,
-        logger
+        logger,
       }),
-      logger
+      logger,
     },
     { item: { ...request, connectionId } }
   );

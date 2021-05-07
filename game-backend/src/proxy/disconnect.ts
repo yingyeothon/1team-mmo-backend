@@ -1,23 +1,23 @@
-import actorRedisPush from "@yingyeothon/actor-system-redis-support/lib/queue/push";
-import actorEnqueue from "@yingyeothon/actor-system/lib/actor/enqueue";
+import { APIGatewayProxyHandler } from "aws-lambda";
 import { ConsoleLogger } from "@yingyeothon/logger";
+import actorEnqueue from "@yingyeothon/actor-system/lib/actor/enqueue";
+import actorRedisPush from "@yingyeothon/actor-system-redis-support/lib/queue/push";
+import actorSubsysKeys from "../env/actorSubsysKeys";
 import redisDel from "@yingyeothon/naive-redis/lib/del";
 import redisGet from "@yingyeothon/naive-redis/lib/get";
-import { APIGatewayProxyHandler } from "aws-lambda";
-import actorSubsysKeys from "../shared/actorSubsysKeys";
-import env from "./support/env";
+import redisKeyPrefixOfConnectionIdAndGameId from "../env/redisKeyPrefixOfConnectionIdAndGameId";
 import responses from "./support/responses";
 import useRedis from "./support/useRedis";
 
 const logger = new ConsoleLogger(`debug`);
 
-export const handle: APIGatewayProxyHandler = async event => {
+export const handle: APIGatewayProxyHandler = async (event) => {
   // Read gameId related this connectionId.
   const { connectionId } = event.requestContext;
-  return useRedis(async redisConnection => {
+  return useRedis(async (redisConnection) => {
     const gameId: string | null = await redisGet(
       redisConnection,
-      env.redisKeyPrefixOfConnectionIdAndGameId + connectionId
+      redisKeyPrefixOfConnectionIdAndGameId + connectionId
     );
     logger.info(`Game id`, connectionId, gameId);
 
@@ -29,15 +29,15 @@ export const handle: APIGatewayProxyHandler = async event => {
           queue: actorRedisPush({
             connection: redisConnection,
             keyPrefix: actorSubsysKeys.queueKeyPrefix,
-            logger
+            logger,
           }),
-          logger
+          logger,
         },
         { item: { type: "leave", connectionId } }
       );
       await redisDel(
         redisConnection,
-        env.redisKeyPrefixOfConnectionIdAndGameId + connectionId
+        redisKeyPrefixOfConnectionIdAndGameId + connectionId
       );
     }
 

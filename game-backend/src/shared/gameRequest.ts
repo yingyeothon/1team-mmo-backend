@@ -1,51 +1,14 @@
-import {
-  IClientLoadRequest,
-  IClientOneTileClickRequest,
-  IClientTwoTilesClickRequest,
-  oneTileActions,
-  twoTilesActions
-} from "./clientRequest";
-
-export interface IGameConnectionIdRequest {
+export interface GameConnectionIdRequest {
   connectionId: string;
 }
 
-export interface IGameEnterRequest extends IGameConnectionIdRequest {
+export interface GameEnterRequest extends GameConnectionIdRequest {
   type: "enter";
   memberId: string;
 }
 
-export interface IGameLeaveRequest extends IGameConnectionIdRequest {
+export interface GameLeaveRequest extends GameConnectionIdRequest {
   type: "leave";
 }
 
-export interface IGameLoadRequest
-  extends IClientLoadRequest,
-    IGameConnectionIdRequest {}
-
-export interface IGameOneTileClickRequest
-  extends IClientOneTileClickRequest,
-    IGameConnectionIdRequest {}
-
-export interface IGameTwoTilesClickRequest
-  extends IClientTwoTilesClickRequest,
-    IGameConnectionIdRequest {}
-
-export type GameRequest =
-  | IGameEnterRequest
-  | IGameLeaveRequest
-  | IGameLoadRequest
-  | IGameOneTileClickRequest
-  | IGameTwoTilesClickRequest;
-
-export function isOneTileAction(
-  request: GameRequest
-): request is IGameOneTileClickRequest {
-  return oneTileActions.includes(request.type);
-}
-
-export function isTwoTilesAction(
-  request: GameRequest
-): request is IGameTwoTilesClickRequest {
-  return twoTilesActions.includes(request.type);
-}
+export type GameRequest = GameEnterRequest | GameLeaveRequest;

@@ -1,4 +1,4 @@
-import { GameStage } from "../model/stage";
+import GameStage from "../models/GameStage";
 
 export default class Ticker {
   private readonly startMillis: number = Date.now();
