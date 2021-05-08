@@ -35,7 +35,11 @@ async function runGameAllTogether({ gameId, members, pollMessages, gameWaitingSe
     catch (error) {
         logger.error({ gameId, context, error }, "Error in game loop");
     }
-    await broadcastStage_1.default({ context, age: 0, stage: GameStage_1.default.End });
+    await broadcastStage_1.default({
+        context,
+        age: gameRunningSeconds,
+        stage: GameStage_1.default.End,
+    });
     await Promise.all(Object.keys(context.connectedUsers).map((connectionId) => lambda_gamebase_1.dropConnection(connectionId)));
     logger.info({ gameId, members }, "Game end");
 }
