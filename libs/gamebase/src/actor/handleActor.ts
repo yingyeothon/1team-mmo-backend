@@ -20,6 +20,7 @@ export default async function handleActor<M>({
   lifetimeSeconds,
   gameMain,
   logger = new ConsoleLogger("debug"),
+  actorLogger = new ConsoleLogger("info"),
 }: {
   event: GameActorStartEvent;
   eventKeyPrefix: string;
@@ -29,6 +30,7 @@ export default async function handleActor<M>({
   lifetimeSeconds: number;
   gameMain: (args: GameMainArguments<M>) => Promise<unknown>;
   logger?: Logger;
+  actorLogger?: Logger;
 }) {
   logger.debug({ event }, "Start a new game lambda");
 
@@ -66,7 +68,7 @@ export default async function handleActor<M>({
       lockKeyPrefix,
       queueKeyPrefix,
       lockTimeoutSeconds: aliveSeconds,
-      logger,
+      logger: actorLogger,
       redisConnection,
     }),
     redisConnection,

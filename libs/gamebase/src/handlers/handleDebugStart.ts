@@ -36,7 +36,7 @@ export default async function handleDebugStart({
 
   // Start a new Lambda to process game messages.
   const promise = new Lambda({
-    endpoint: `http://localhost:3000`,
+    endpoint: `http://localhost:3002`,
   })
     .invoke({
       FunctionName: process.env.GAME_ACTOR_LAMBDA_NAME!,
