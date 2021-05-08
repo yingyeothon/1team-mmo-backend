@@ -32,13 +32,16 @@ export default async function gameMain({
 
     isGameOver: ({ context }) =>
       Object.keys(context.connectedUsers).length === 0,
-    processMessage: async ({ context, message }) => {
+    processMessage: async ({
+      context,
+      message: { connectionId, ...payload },
+    }) => {
       await broadcast(
         [
           ...Object.keys(context.connectedUsers),
           ...context.observers.map((ob) => ob.connectionId).filter(Boolean),
         ],
-        message
+        "type" in payload ? payload : { type: "raw", payload }
       );
     },
     updateTimeDelta: async () => {},
