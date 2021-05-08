@@ -53,7 +53,11 @@ export default async function runGameAllTogether<M extends BaseGameRequest>({
   } catch (error) {
     logger.error({ gameId, context, error }, "Error in game loop");
   }
-  await broadcastStage({ context, age: 0, stage: GameStage.End });
+  await broadcastStage({
+    context,
+    age: gameRunningSeconds,
+    stage: GameStage.End,
+  });
   await Promise.all(
     Object.keys(context.connectedUsers).map((connectionId) =>
       dropConnection(connectionId)
