@@ -11,7 +11,7 @@ const set_1 = __importDefault(require("@yingyeothon/naive-redis/lib/set"));
 const saveActorStartEvent_1 = __importDefault(require("./saveActorStartEvent"));
 const startActorLoop_1 = __importDefault(require("./startActorLoop"));
 const aliveMarginSeconds = 10;
-async function handleActor({ event, eventKeyPrefix, awaiterKeyPrefix, queueKeyPrefix, lockKeyPrefix, lifetimeSeconds, gameMain, logger = new logger_1.ConsoleLogger("debug"), }) {
+async function handleActor({ event, eventKeyPrefix, awaiterKeyPrefix, queueKeyPrefix, lockKeyPrefix, lifetimeSeconds, gameMain, logger = new logger_1.ConsoleLogger("debug"), actorLogger = new logger_1.ConsoleLogger("info"), }) {
     logger.debug({ event }, "Start a new game lambda");
     const { gameId, members } = event;
     if (!gameId) {
@@ -40,7 +40,7 @@ async function handleActor({ event, eventKeyPrefix, awaiterKeyPrefix, queueKeyPr
             lockKeyPrefix,
             queueKeyPrefix,
             lockTimeoutSeconds: aliveSeconds,
-            logger,
+            logger: actorLogger,
             redisConnection: redisConnection_1.default,
         }),
         redisConnection: redisConnection_1.default,

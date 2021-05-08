@@ -25,7 +25,7 @@ async function handleDebugStart({ event, actorLockKeyPrefix, }) {
     }).release(startEvent.gameId));
     logger.debug({ gameId: startEvent.gameId }, "Release actor's lock");
     const promise = new aws_sdk_1.Lambda({
-        endpoint: `http://localhost:3000`,
+        endpoint: `http://localhost:3002`,
     })
         .invoke({
         FunctionName: process.env.GAME_ACTOR_LAMBDA_NAME,
